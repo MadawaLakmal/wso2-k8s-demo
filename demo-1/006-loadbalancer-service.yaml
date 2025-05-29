@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-demo
+  labels:
+    env: prod
+    app: nginx
+spec:
+  selector:
+    app: nginx
+    env: prod
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
