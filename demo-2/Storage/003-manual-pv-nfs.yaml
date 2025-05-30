@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-server
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: slow
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /nfs_data/kubedata
+    server: 192.168.105.26
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: "slow"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nfs-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: busybox
+      command: [ "sleep", "3600" ]
+      volumeMounts:
+        - name: nfs-volume
+          mountPath: /mnt/demo
+  volumes:
+    - name: nfs-volume
+      persistentVolumeClaim:
+        claimName: nfs-pvc

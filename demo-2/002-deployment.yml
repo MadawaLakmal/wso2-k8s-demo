@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wso2-demo-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wso2-demo-app
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: wso2-demo-app
+        env: prod
+    spec:
+      containers:
+      - name: wso2-demo-app
+        image: madawa/wso2-demo # wso2-app-demo
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: wso2-demo-app
+    env: prod
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

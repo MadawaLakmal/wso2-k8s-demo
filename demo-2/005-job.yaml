@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-demo
+spec:
+  backoffLimit: 4
+  completions: 4
+  parallelism: 2
+  template:
+    spec:
+      containers:
+      - name: job-demo
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args: ["echo hello from $HOSTNAME!"]
+      restartPolicy: Never
+
+# Get available pods and check logs

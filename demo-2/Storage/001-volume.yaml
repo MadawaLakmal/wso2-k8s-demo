@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-example
+  labels:
+    app: vol-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+  - name: content
+    image: alpine:latest
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          echo "Date and Time is $(date)<br>" >> /html/index.html;
+          sleep 5;
+        done
+    volumeMounts:
+    - name: html
+      mountPath: /html
+  volumes:
+  - name: html
+    emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: vol-test-demo
+  labels:
+    app: vol-test
+spec:
+  selector:
+    app: vol-test
+  type: NodePort
+  ports:
+    - nodePort: 32000
+      protocol: TCP
+      port: 80
+      targetPort: 80
