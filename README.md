@@ -81,4 +81,4 @@ minikube start --force
 
 ## License
 
-This project is maintained by WSO2 and is provided under the [MIT License](LICENSE).
+This project is maintained by respective Owner and is provided under the [MIT License](LICENSE).
