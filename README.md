@@ -67,7 +67,7 @@ minikube start
 If you encounter permissions issues with the default driver, use the QEMU driver:
 
 ```bash
-minikube start --driver=qemu --force
+minikube start --force
 ```
 
 ---
